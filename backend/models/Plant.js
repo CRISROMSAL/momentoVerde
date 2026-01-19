@@ -1,0 +1,11 @@
+const mongoose = require('mongoose');
+
+const PlantSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    species: { type: String },
+    wateringFrequency: { type: Number, required: true }, // cada cuántos días
+    lastWatered: { type: Date, default: Date.now },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Plant', PlantSchema);
