@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
 require('dotenv').config();
 
 const app = express();
@@ -11,10 +12,12 @@ app.use(express.json()); // Esto permite que el servidor entienda datos en forma
 
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
+const plantRoutes = require('./routes/plantRoutes');
 
 // Usar rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/plants', require('./routes/plantRoutes'));
+app.use('/api/plants', plantRoutes);
 
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI)
