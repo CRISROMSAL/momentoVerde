@@ -1,0 +1,37 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const Login = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        try {
+            // Petición al backend que ya probamos en Postman
+            const res = await axios.post('http://localhost:4000/api/auth/login', formData);
+            console.log('Login exitoso, token:', res.data.token);
+            alert('¡Bienvenido!');
+            // Aquí guardaremos el token en el futuro
+        } catch (err) {
+            console.error(err.response.data);
+            alert('Error al iniciar sesión');
+        }
+    };
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h2>Iniciar Sesión</h2>
+            <form onSubmit={onSubmit}>
+                <input type="email" name="email" placeholder="Email" onChange={onChange} required />
+                <br /><br />
+                <input type="password" name="password" placeholder="Contraseña" onChange={onChange} required />
+                <br /><br />
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+    );
+};
+
+export default Login;
