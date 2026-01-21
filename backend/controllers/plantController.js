@@ -2,13 +2,15 @@ const Plant = require('../models/Plant');
 
 exports.createPlant = async (req, res) => {
     try {
-        const { name, species, wateringFrequency, lastWatered } = req.body;
+        // 1. Extraemos también 'image' del cuerpo de la petición
+        const { name, species, wateringFrequency, lastWatered, image } = req.body;
 
         const newPlant = new Plant({
             name,
             species,
             wateringFrequency,
             lastWatered,
+            image, // 2. Guardamos el string de la imagen en la base de datos
             user: req.user.id 
         });
 
@@ -29,22 +31,18 @@ exports.getPlants = async (req, res) => {
     }
 };
 
-// NUEVA FUNCIÓN: Eliminar una planta
 exports.deletePlant = async (req, res) => {
     try {
-        // 1. Buscar la planta por el ID que viene en la URL
         let plant = await Plant.findById(req.params.id);
 
         if (!plant) {
             return res.status(404).json({ msg: 'Planta no encontrada' });
         }
 
-        // 2. Seguridad: Verificar que la planta pertenece al usuario del Token
         if (plant.user.toString() !== req.user.id) {
             return res.status(401).json({ msg: 'No autorizado' });
         }
 
-        // 3. Eliminar
         await Plant.findByIdAndDelete(req.params.id);
         res.json({ msg: 'Planta eliminada correctamente' });
         

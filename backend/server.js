@@ -8,7 +8,9 @@ const app = express();
 
 // Middlewares
 app.use(cors());
-app.use(express.json()); // Esto permite que el servidor entienda datos en formato JSON
+// Aumentamos el límite a 10 megas para que quepan las fotos
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
