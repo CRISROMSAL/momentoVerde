@@ -10,5 +10,6 @@ router.delete('/:id', auth, plantController.deletePlant);
 
 // Ruta para eliminar: DELETE /api/plants/:id
 router.delete('/:id', auth, plantController.deletePlant);
+router.put('/:id/water', auth, plantController.updateWatering);
 
 module.exports = router;

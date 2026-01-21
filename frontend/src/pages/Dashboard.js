@@ -8,7 +8,7 @@ const Dashboard = () => {
         species: '', 
         wateringFrequency: '', 
         lastWatered: '',
-        image: '' // Estado para la imagen en Base64
+        image: '' 
     });
 
     useEffect(() => {
@@ -25,7 +25,6 @@ const Dashboard = () => {
         fetchPlants();
     }, []);
 
-    // Función para convertir la imagen a String Base64
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -45,7 +44,6 @@ const Dashboard = () => {
                 headers: { 'x-auth-token': token }
             });
             setPlants([...plants, res.data]);
-            // Limpiamos el formulario incluyendo la imagen
             setNewPlant({ name: '', species: '', wateringFrequency: '', lastWatered: '', image: '' });
             alert('¡Planta añadida con éxito!');
         } catch (err) { alert('Error al añadir'); }
@@ -62,15 +60,47 @@ const Dashboard = () => {
         } catch (err) { alert('Error al eliminar'); }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
+    // --- NUEVAS FUNCIONES DE RIEGO ---
+
+    const handleWatering = async (id, customDate = null) => {
+        try {
+            const token = localStorage.getItem('token');
+            const dateToSave = customDate || new Date().toISOString().split('T')[0];
+            
+            const res = await axios.put(`http://localhost:4000/api/plants/${id}/water`, 
+                { lastWatered: dateToSave },
+                { headers: { 'x-auth-token': token } }
+            );
+
+            setPlants(plants.map(p => p._id === id ? res.data : p));
+            alert('¡Riego registrado!');
+        } catch (err) {
+            alert('Error al registrar el riego');
+        }
+    };
+
+    const getWateringStatus = (lastDate, frequency) => {
+        const nextDate = new Date(lastDate);
+        nextDate.setDate(nextDate.getDate() + parseInt(frequency));
+        
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        nextDate.setHours(0,0,0,0);
+
+        if (today.getTime() === nextDate.getTime()) return 'TODAY';
+        if (today > nextDate) return 'OVERDUE';
+        return 'FUTURE';
     };
 
     const calculateNextWatering = (lastDate, frequency) => {
         const date = new Date(lastDate);
         date.setDate(date.getDate() + parseInt(frequency));
         return date.toLocaleDateString();
+    };
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
     };
 
     return (
@@ -95,7 +125,6 @@ const Dashboard = () => {
                     <label>¿Quieres añadir una foto de tu planta?</label>
                     <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginBottom: '10px' }} />
                     
-                    {/* Vista previa de la imagen antes de subirla */}
                     {newPlant.image && <img src={newPlant.image} alt="preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '10px', marginBottom: '10px' }} />}
                     
                     <button type="submit" style={{ background: '#4CAF50', color: 'white', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
@@ -105,29 +134,58 @@ const Dashboard = () => {
             </form>
 
             <ul style={{ listStyle: 'none', padding: 0 }}>
-                {plants.map(plant => (
-                    <li key={plant._id} style={{ border: '1px solid #ddd', margin: '15px 0', padding: '15px', borderRadius: '8px', display: 'flex', gap: '15px', alignItems: 'center', background: 'white' }}>
-                        
-                        {/* Mostramos la imagen de la planta si existe */}
-                        {plant.image && (
-                            <img src={plant.image} alt={plant.name} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '10px' }} />
-                        )}
-                        
-                        <div style={{ flex: 1 }}>
-                            <strong style={{ fontSize: '1.2em' }}>{plant.name}</strong> - {plant.species}
-                            <br />
-                            <span>💧 Riego cada {plant.wateringFrequency} días</span>
-                            <br />
-                            <span style={{ color: '#2e7d32', fontWeight: 'bold' }}>
-                                📅 Próximo riego: {calculateNextWatering(plant.lastWatered, plant.wateringFrequency)}
-                            </span>
-                        </div>
+                {plants.map(plant => {
+                    const status = getWateringStatus(plant.lastWatered, plant.wateringFrequency);
+                    const nextDateStr = calculateNextWatering(plant.lastWatered, plant.wateringFrequency);
 
-                        <button onClick={() => handleDelete(plant._id)} style={{ background: 'none', border: '1px solid #ff4d4d', color: '#ff4d4d', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer' }}>
-                            Eliminar
-                        </button>
-                    </li>
-                ))}
+                    return (
+                        <li key={plant._id} style={{ border: '1px solid #ddd', margin: '15px 0', padding: '15px', borderRadius: '8px', display: 'flex', gap: '15px', alignItems: 'center', background: 'white' }}>
+                            
+                            {plant.image && (
+                                <img src={plant.image} alt={plant.name} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '10px' }} />
+                            )}
+                            
+                            <div style={{ flex: 1 }}>
+                                <strong style={{ fontSize: '1.2em' }}>{plant.name}</strong> - {plant.species}
+                                <br />
+                                <span>💧 Riego cada {plant.wateringFrequency} días</span>
+                                <br />
+                                <span style={{ color: '#2e7d32', fontWeight: 'bold' }}>
+                                    📅 Próximo riego: {nextDateStr}
+                                </span>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    {status === 'TODAY' && (
+                                        <button onClick={() => handleWatering(plant._id)} style={{ background: '#2196F3', color: 'white', padding: '8px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>
+                                            💧 ¡Toca regar hoy! (Confirmar)
+                                        </button>
+                                    )}
+
+                                    {status === 'OVERDUE' && (
+                                        <div style={{ background: '#ffebee', padding: '10px', borderRadius: '5px', border: '1px solid #ffcdd2' }}>
+                                            <p style={{ color: '#d32f2f', margin: '0 0 10px 0', fontWeight: 'bold' }}>⚠️ ¡A falta de regar!</p>
+                                            <input type="date" id={`date-${plant._id}`} defaultValue={new Date().toISOString().split('T')[0]} style={{ padding: '5px' }} />
+                                            <button onClick={() => {
+                                                const selectedDate = document.getElementById(`date-${plant._id}`).value;
+                                                handleWatering(plant._id, selectedDate);
+                                            }} style={{ marginLeft: '10px', background: '#d32f2f', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '3px', cursor: 'pointer' }}>
+                                                Registrar Riego
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {status === 'FUTURE' && (
+                                        <span style={{ color: '#666', fontSize: '0.9em', fontStyle: 'italic' }}>Aún no toca regar</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <button onClick={() => handleDelete(plant._id)} style={{ background: 'none', border: '1px solid #ff4d4d', color: '#ff4d4d', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer', alignSelf: 'flex-start' }}>
+                                Eliminar
+                            </button>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
