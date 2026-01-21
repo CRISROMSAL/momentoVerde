@@ -56,16 +56,20 @@ exports.deletePlant = async (req, res) => {
 exports.updateWatering = async (req, res) => {
     try {
         const { lastWatered } = req.body;
-        let plant = await Plant.findById(req.params.id);
+        
+        // El secreto está en el tercer parámetro: { new: true }
+        // Esto hace que MongoDB devuelva la planta DESPUÉS de actualizar la fecha
+        const plant = await Plant.findByIdAndUpdate(
+            req.params.id,
+            { lastWatered },
+            { new: true } 
+        );
 
         if (!plant) return res.status(404).json({ msg: 'Planta no encontrada' });
-        if (plant.user.toString() !== req.user.id) return res.status(401).json({ msg: 'No autorizado' });
 
-        plant.lastWatered = lastWatered || new Date(); // Si no viene fecha, pone la de hoy
-        await plant.save();
-        
-        res.json(plant);
+        res.json(plant); // Enviamos la planta con la nueva fecha al Frontend
     } catch (err) {
-        res.status(500).send('Error al actualizar el riego');
+        console.error(err.message);
+        res.status(500).send('Error en el servidor');
     }
 };

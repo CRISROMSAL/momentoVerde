@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; // Importante para el estado
 import axios from 'axios'; // Importante para la conexión
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     // Definimos formData y la función para actualizarlo
@@ -35,6 +36,9 @@ const Login = () => {
                 <br /><br />
                 <button type="submit">Entrar</button>
             </form>
+            <p style={{ marginTop: '15px', textAlign: 'center' }}>
+                ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+            </p>
         </div>
     );
 };
