@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react'; // Importante para el estado
+import axios from 'axios'; // Importante para la conexión
 
 const Login = () => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    // Definimos formData y la función para actualizarlo
+    const [formData, setFormData] = useState({ 
+        email: '', 
+        password: '' 
+    });
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            // Petición al backend que ya probamos en Postman
+            // Usamos formData aquí para enviarlo al backend
             const res = await axios.post('http://localhost:4000/api/auth/login', formData);
-            console.log('Login exitoso, token:', res.data.token);
+            
+            localStorage.setItem('token', res.data.token); 
             alert('¡Bienvenido!');
-            // Aquí guardaremos el token en el futuro
+            window.location.href = '/dashboard'; 
         } catch (err) {
-            console.error(err.response.data);
+            console.error(err.response?.data);
             alert('Error al iniciar sesión');
         }
     };

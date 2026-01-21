@@ -4,7 +4,7 @@ const PlantSchema = new mongoose.Schema({
     name: { type: String, required: true },
     species: { type: String },
     wateringFrequency: { type: Number, required: true }, // cada cuántos días
-    lastWatered: { type: Date, default: Date.now },
+    lastWatered: { type: Date, required: true  },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 

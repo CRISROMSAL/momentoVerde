@@ -6,5 +6,9 @@ const auth = require('../middleware/auth'); // Importamos tu middleware de segur
 // Todas estas rutas están protegidas por 'auth'
 router.post('/', auth, plantController.createPlant);
 router.get('/', auth, plantController.getPlants);
+router.delete('/:id', auth, plantController.deletePlant);
+
+// Ruta para eliminar: DELETE /api/plants/:id
+router.delete('/:id', auth, plantController.deletePlant);
 
 module.exports = router;
