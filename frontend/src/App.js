@@ -8,7 +8,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1>Momento Verde</h1>
         <Routes>
           <Route path="/" element={<Login />} /> {/* La página principal será el Login */}
           <Route path="/register" element={<Register />} />

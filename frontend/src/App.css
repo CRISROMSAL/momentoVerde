@@ -1,38 +1,320 @@
-.App {
-  text-align: center;
+/* RESET BÁSICO */
+* {
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f3f6f3 0%, #e8efe8 100%);
+  color: #2c3e2d;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* LAYOUT PRINCIPAL */
+.dashboard-container {
   min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+.main-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* NAVBAR */
+.navbar {
+  padding: 20px 40px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #3a5a40;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.logo span {
+  font-weight: 300;
+}
+
+.btn-logout {
+  border: 1px solid #dbaeb2;
+  background: transparent;
+  color: #c76d75;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: #c76d75;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* FORMULARIO */
+.form-section {
+  margin-bottom: 50px;
+  margin-top: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.plant-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+}
+
+.plant-form h2 {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #555;
+  margin-top: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.clean-input {
+  border: none;
+  border-bottom: 2px solid #eee;
+  padding: 10px 5px;
+  font-size: 0.95rem;
+  outline: none;
+  background: transparent;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+.clean-input:focus {
+  border-bottom-color: #3a5a40;
+}
+
+.date-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-group label {
+  font-size: 0.7rem;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.file-label {
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #7c9473;
+}
+
+.file-label input {
+  display: none;
+}
+
+.btn-primary {
+  background: #3a5a40;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(58, 90, 64, 0.3);
+  transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+/* GALERÍA (TARJETAS) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.plant-card {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.plant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.image-wrapper {
+  height: 250px;
+  width: 100%;
+  position: relative;
+  background: #f0f0f0;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #ccc;
+}
+
+.btn-delete {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #c76d75;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-content h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  color: #2c3e2d;
+}
+
+.species {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 20px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+}
+
+.next-date {
+  font-weight: bold;
+  color: #4a6741;
+}
+
+/* ESTADOS DE RIEGO */
+.status-area {
+  margin-top: 10px;
+}
+
+.btn-today {
+  width: 100%;
+  background: #6ab04c;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn-today:hover {
+  background: #558f3d;
+}
+
+.overdue-box {
+  background: #fff5f5;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ffe0e0;
+}
+
+.overdue-box p {
+  color: #e15f41;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.overdue-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.overdue-actions input {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 0.8rem;
+  width: 70%;
+}
+
+.overdue-actions button {
+  background: #e15f41;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.status-ok {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-size: 1.1rem;
 }
