@@ -318,3 +318,119 @@ body {
   color: #888;
   font-size: 1.1rem;
 }
+
+
+/* =========================================
+   ESTILOS DEL LOGIN (Pegar al final de App.css)
+   ========================================= */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Usa el mismo fondo degradado que ya tienes en el body */
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95); /* Un poco más opaco para leer mejor */
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.login-logo {
+  font-size: 1.8rem;
+  color: #3a5a40;
+  letter-spacing: 2px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.login-logo span {
+  font-weight: 300;
+}
+
+.login-title {
+  margin: 0;
+  color: #2c3e2d;
+  font-size: 1.4rem;
+}
+
+.login-subtitle {
+  color: #888;
+  margin-top: 5px;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9fdf9;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: #3a5a40;
+  box-shadow: 0 0 0 3px rgba(58, 90, 64, 0.1);
+  background: white;
+}
+
+.btn-login {
+  background: #3a5a40;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 5px 15px rgba(58, 90, 64, 0.2);
+}
+
+.btn-login:hover {
+  background: #2c4430;
+  transform: translateY(-2px);
+}
+
+.login-footer {
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.login-footer a {
+  color: #3a5a40;
+  font-weight: bold;
+  text-decoration: none;
+}

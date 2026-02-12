@@ -1,9 +1,10 @@
-import React, { useState } from 'react'; // Importante para el estado
-import axios from 'axios'; // Importante para la conexión
+import React, { useState } from 'react'; 
+import axios from 'axios'; 
 import { Link } from 'react-router-dom';
+import '../App.css'; // <--- ESTO ES LO ÚNICO NUEVO TÉCNICAMENTE (Para cargar el diseño)
 
 const Login = () => {
-    // Definimos formData y la función para actualizarlo
+    // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
     const [formData, setFormData] = useState({ 
         email: '', 
         password: '' 
@@ -26,19 +27,50 @@ const Login = () => {
         }
     };
 
+    // --- EL DISEÑO NUEVO (SOLO CAMBIA EL HTML/CLASES) ---
     return (
-        <div style={{ padding: '20px' }}>
-            <h2>Iniciar Sesión</h2>
-            <form onSubmit={onSubmit}>
-                <input type="email" name="email" placeholder="Email" onChange={onChange} required />
-                <br /><br />
-                <input type="password" name="password" placeholder="Contraseña" onChange={onChange} required />
-                <br /><br />
-                <button type="submit">Entrar</button>
-            </form>
-            <p style={{ marginTop: '15px', textAlign: 'center' }}>
-                ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
-            </p>
+        <div className="login-container">
+            <div className="login-card">
+                {/* Cabecera bonita */}
+                <h1 className="login-logo">MOMENTO<span>VERDE</span></h1>
+                <p className="login-subtitle">El cuidado de tu jardín</p>
+
+                <form onSubmit={onSubmit} className="login-form">
+                    <div className="input-group">
+                        <label>Email</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            placeholder="tucorreo@ejemplo.com" 
+                            // Aquí usamos tu formData.email
+                            value={formData.email} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Contraseña</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            placeholder="••••••••" 
+                            // Aquí usamos tu formData.password
+                            value={formData.password} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+
+                    <button type="submit" className="btn-login">Entrar</button>
+                </form>
+
+                <div className="login-footer">
+                    <p>
+                        ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 };
