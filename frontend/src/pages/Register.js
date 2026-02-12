@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../App.css'; // <--- ÚNICO AÑADIDO TÉCNICO: Cargar el diseño
+import Swal from 'sweetalert2'; // <--- IMPORTADO: Librería de alertas
+import '../App.css'; 
 
 const Register = () => {
     // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
@@ -18,14 +19,26 @@ const Register = () => {
     const onSubmit = async e => {
         e.preventDefault();
         
+        // CAMBIO: Alerta visual si no coinciden
         if (password !== confirmPassword) {
-            alert('Las contraseñas no coinciden');
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
             return;
         }
 
+        // CAMBIO: Alerta visual si es corta
         // Validación extra: El backend suele dar error 500 si la clave es muy corta
         if (password.length < 6) {
-            alert('La contraseña debe tener al menos 6 caracteres');
+            Swal.fire({
+                title: 'Contraseña débil',
+                text: 'La contraseña debe tener al menos 6 caracteres',
+                icon: 'warning',
+                confirmButtonColor: '#3a5a40'
+            });
             return;
         }
 
@@ -39,16 +52,33 @@ const Register = () => {
             });
 
             localStorage.setItem('token', res.data.token);
-            alert('Usuario registrado con éxito');
+            
+            // CAMBIO: Alerta de éxito con temporizador antes de redirigir
+            await Swal.fire({
+                title: '¡Bienvenido!',
+                text: 'Usuario registrado con éxito',
+                icon: 'success',
+                confirmButtonColor: '#3a5a40',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
             window.location.href = '/dashboard';
         } catch (err) {
             // Esto te dirá en la consola (F12) el motivo real del Error 500
             console.error("Detalle del error del servidor:", err.response?.data);
-            alert(err.response?.data?.msg || 'Error al registrarse. Intenta con otro email.');
+            
+            // CAMBIO: Alerta de error visual con el mensaje del backend
+            Swal.fire({
+                title: 'Error',
+                text: err.response?.data?.msg || 'Error al registrarse. Intenta con otro email.',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
         }
     };
 
-    // --- NUEVO DISEÑO VISUAL (Lógica visual cambiada a clases CSS) ---
+    // --- NUEVO DISEÑO VISUAL (El que ya tenías configurado) ---
     return (
         <div className="login-container">
             <div className="login-card">

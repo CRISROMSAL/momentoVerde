@@ -1,7 +1,8 @@
 import React, { useState } from 'react'; 
 import axios from 'axios'; 
 import { Link } from 'react-router-dom';
-import '../App.css'; // <--- ESTO ES LO ÚNICO NUEVO TÉCNICAMENTE (Para cargar el diseño)
+import Swal from 'sweetalert2'; // <--- IMPORTANTE: Importamos la librería
+import '../App.css';
 
 const Login = () => {
     // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
@@ -15,60 +16,57 @@ const Login = () => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            // Usamos formData aquí para enviarlo al backend
             const res = await axios.post('http://localhost:4000/api/auth/login', formData);
             
             localStorage.setItem('token', res.data.token); 
-            alert('¡Bienvenido!');
+            
+            // CAMBIO: Alerta bonita en lugar de alert()
+            await Swal.fire({
+                title: '¡Bienvenido!',
+                text: 'Entrando a tu jardín...',
+                icon: 'success',
+                confirmButtonColor: '#3a5a40',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
             window.location.href = '/dashboard'; 
         } catch (err) {
             console.error(err.response?.data);
-            alert('Error al iniciar sesión');
+            
+            // CAMBIO: Alerta de error bonita
+            Swal.fire({
+                title: 'Error',
+                text: 'Credenciales incorrectas o error de conexión',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
         }
     };
 
-    // --- EL DISEÑO NUEVO (SOLO CAMBIA EL HTML/CLASES) ---
+    // --- DISEÑO VISUAL ---
     return (
         <div className="login-container">
             <div className="login-card">
-                {/* Cabecera bonita */}
                 <h1 className="login-logo">MOMENTO<span>VERDE</span></h1>
                 <p className="login-subtitle">El cuidado de tu jardín</p>
 
                 <form onSubmit={onSubmit} className="login-form">
                     <div className="input-group">
                         <label>Email</label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            placeholder="tucorreo@ejemplo.com" 
-                            // Aquí usamos tu formData.email
-                            value={formData.email} 
-                            onChange={onChange} 
-                            required 
-                        />
+                        <input type="email" name="email" placeholder="tucorreo@ejemplo.com" value={formData.email} onChange={onChange} required />
                     </div>
 
                     <div className="input-group">
                         <label>Contraseña</label>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            placeholder="••••••••" 
-                            // Aquí usamos tu formData.password
-                            value={formData.password} 
-                            onChange={onChange} 
-                            required 
-                        />
+                        <input type="password" name="password" placeholder="••••••••" value={formData.password} onChange={onChange} required />
                     </div>
 
                     <button type="submit" className="btn-login">Entrar</button>
                 </form>
 
                 <div className="login-footer">
-                    <p>
-                        ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
-                    </p>
+                    <p>¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link></p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // <--- IMPORTADO: Librería de alertas
 import '../App.css';
-// Asegúrate de que los estilos se cargan (normalmente ya se importan en App.js)
 
 const Dashboard = () => {
     // --- TU LÓGICA ORIGINAL (INTACTA) ---
@@ -46,19 +46,66 @@ const Dashboard = () => {
             });
             setPlants([...plants, res.data]);
             setNewPlant({ name: '', species: '', wateringFrequency: '', lastWatered: '', image: '' });
-            alert('¡Planta añadida con éxito! 🌿');
-        } catch (err) { alert('Error al añadir la planta'); }
+            
+            // CAMBIO: Alerta bonita
+            Swal.fire({
+                title: '¡Añadida!',
+                text: 'Planta añadida con éxito',
+                icon: 'success',
+                confirmButtonColor: '#3a5a40',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        } catch (err) { 
+            // CAMBIO: Alerta error
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al añadir la planta',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
+        }
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar esta planta?')) return;
+        // CAMBIO: Sustituye a window.confirm (que es feo y bloqueante)
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás recuperar esta planta",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33', // Rojo para peligro
+            cancelButtonColor: '#3a5a40', // Verde para cancelar
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
             const token = localStorage.getItem('token');
             await axios.delete(`http://localhost:4000/api/plants/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             setPlants(plants.filter(plant => plant._id !== id));
-        } catch (err) { alert('Error al eliminar'); }
+            
+            // CAMBIO: Pequeña confirmación visual al borrar
+            Swal.fire({
+                icon: 'success',
+                title: 'Eliminada',
+                showConfirmButton: false,
+                timer: 1000
+            });
+
+        } catch (err) { 
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al eliminar',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
+        }
     };
 
     const handleWatering = async (id, customDate = null) => {
@@ -77,8 +124,23 @@ const Dashboard = () => {
                     return p;
                 })
             );
-            alert('¡Riego registrado!');
-        } catch (err) { alert('Error al registrar el riego.'); }
+            
+            // CAMBIO: Alerta bonita
+            Swal.fire({
+                icon: 'success',
+                title: '¡Riego registrado!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+        } catch (err) { 
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al registrar el riego.',
+                icon: 'error',
+                confirmButtonColor: '#3a5a40'
+            });
+        }
     };
 
     const getWateringStatus = (lastDate, frequency) => {
@@ -107,7 +169,7 @@ const Dashboard = () => {
         window.location.href = '/';
     };
 
-    // --- HTML CON CLASES CSS ---
+    // --- HTML CON CLASES CSS (Tu código original visual) ---
     return (
         <div className="dashboard-container">
             <nav className="navbar">
