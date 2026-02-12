@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // <--- IMPORTADO: Librería de alertas
+import Swal from 'sweetalert2'; 
 import '../App.css';
 
 const Dashboard = () => {
-    // --- TU LÓGICA ORIGINAL (INTACTA) ---
+    
     const [plants, setPlants] = useState([]);
     const [newPlant, setNewPlant] = useState({ 
         name: '', 
@@ -47,7 +47,7 @@ const Dashboard = () => {
             setPlants([...plants, res.data]);
             setNewPlant({ name: '', species: '', wateringFrequency: '', lastWatered: '', image: '' });
             
-            // CAMBIO: Alerta bonita
+            
             Swal.fire({
                 title: '¡Añadida!',
                 text: 'Planta añadida con éxito',
@@ -58,7 +58,7 @@ const Dashboard = () => {
             });
 
         } catch (err) { 
-            // CAMBIO: Alerta error
+            
             Swal.fire({
                 title: 'Error',
                 text: 'Error al añadir la planta',
@@ -69,7 +69,7 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (id) => {
-        // CAMBIO: Sustituye a window.confirm (que es feo y bloqueante)
+        
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: "No podrás recuperar esta planta",
@@ -90,7 +90,7 @@ const Dashboard = () => {
             });
             setPlants(plants.filter(plant => plant._id !== id));
             
-            // CAMBIO: Pequeña confirmación visual al borrar
+            // CAMBIO: confirmación visual al borrar
             Swal.fire({
                 icon: 'success',
                 title: 'Eliminada',
@@ -125,7 +125,7 @@ const Dashboard = () => {
                 })
             );
             
-            // CAMBIO: Alerta bonita
+            // CAMBIO: Alerta 
             Swal.fire({
                 icon: 'success',
                 title: '¡Riego registrado!',
@@ -169,7 +169,7 @@ const Dashboard = () => {
         window.location.href = '/';
     };
 
-    // --- HTML CON CLASES CSS (Tu código original visual) ---
+    // --- HTML CON CLASES CSS ---
     return (
         <div className="dashboard-container">
             <nav className="navbar">

@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
         // Crear nuevo usuario
         user = new User({ name, email, password });
 
-        // Cifrar contraseña (Requisito 5.1)
+        // Cifrar contraseña 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 

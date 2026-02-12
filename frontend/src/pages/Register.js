@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // <--- IMPORTADO: Librería de alertas
+import Swal from 'sweetalert2'; 
 import '../App.css'; 
 
 const Register = () => {
-    // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
+
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -30,7 +30,6 @@ const Register = () => {
             return;
         }
 
-        // CAMBIO: Alerta visual si es corta
         // Validación extra: El backend suele dar error 500 si la clave es muy corta
         if (password.length < 6) {
             Swal.fire({
@@ -43,7 +42,6 @@ const Register = () => {
         }
 
         try {
-            // CAMBIO AQUÍ: Enviamos 'name' en lugar de 'username' 
             // para coincidir con lo que suele pedir el Modelo de MongoDB
             const res = await axios.post('http://localhost:4000/api/auth/register', {
                 name: username, 
@@ -65,10 +63,10 @@ const Register = () => {
 
             window.location.href = '/dashboard';
         } catch (err) {
-            // Esto te dirá en la consola (F12) el motivo real del Error 500
+            // Estodirá en la consola (F12) el motivo real del Error 500
             console.error("Detalle del error del servidor:", err.response?.data);
             
-            // CAMBIO: Alerta de error visual con el mensaje del backend
+            // CAMBIO: Alerta de error visual 
             Swal.fire({
                 title: 'Error',
                 text: err.response?.data?.msg || 'Error al registrarse. Intenta con otro email.',
@@ -78,7 +76,7 @@ const Register = () => {
         }
     };
 
-    // --- NUEVO DISEÑO VISUAL (El que ya tenías configurado) ---
+   
     return (
         <div className="login-container">
             <div className="login-card">

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'; 
 import axios from 'axios'; 
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2'; // <--- IMPORTANTE: Importamos la librería
+import Swal from 'sweetalert2'; 
 import '../App.css';
 
 const Login = () => {
-    // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
+    
     const [formData, setFormData] = useState({ 
         email: '', 
         password: '' 
@@ -20,7 +20,7 @@ const Login = () => {
             
             localStorage.setItem('token', res.data.token); 
             
-            // CAMBIO: Alerta bonita en lugar de alert()
+            // CAMBIO: Alerta de error
             await Swal.fire({
                 title: '¡Bienvenido!',
                 text: 'Entrando a tu jardín...',
@@ -34,7 +34,7 @@ const Login = () => {
         } catch (err) {
             console.error(err.response?.data);
             
-            // CAMBIO: Alerta de error bonita
+            // CAMBIO: Alerta de error 
             Swal.fire({
                 title: 'Error',
                 text: 'Credenciales incorrectas o error de conexión',
