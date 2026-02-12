@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../App.css'; // <--- ÚNICO AÑADIDO TÉCNICO: Cargar el diseño
 
 const Register = () => {
+    // --- TU LÓGICA ORIGINAL EXACTA (INTACTA) ---
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -46,22 +48,75 @@ const Register = () => {
         }
     };
 
+    // --- NUEVO DISEÑO VISUAL (Lógica visual cambiada a clases CSS) ---
     return (
-        <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
-            <h2>Crear Cuenta 🌿</h2>
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <input type="text" placeholder="Nombre de usuario" name="username" value={username} onChange={onChange} required style={{ padding: '8px' }} />
-                <input type="email" placeholder="Email" name="email" value={email} onChange={onChange} required style={{ padding: '8px' }} />
-                <input type="password" placeholder="Contraseña" name="password" value={password} onChange={onChange} required style={{ padding: '8px' }} />
-                <input type="password" placeholder="Confirmar contraseña" name="confirmPassword" value={confirmPassword} onChange={onChange} required style={{ padding: '8px' }} />
-                
-                <button type="submit" style={{ background: '#4CAF50', color: 'white', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }}>
-                    Registrarse
-                </button>
-            </form>
-            <p style={{ marginTop: '15px' }}>
-                ¿Ya tienes cuenta? <a href="/">Inicia sesión aquí</a>
-            </p>
+        <div className="login-container">
+            <div className="login-card">
+                <h1 className="login-logo">MOMENTO<span>VERDE</span></h1>
+                <h2 className="login-title">Crear Cuenta</h2>
+                <p className="login-subtitle">Empieza a cuidar tus plantas hoy</p>
+
+                <form onSubmit={onSubmit} className="login-form">
+                    
+                    <div className="input-group">
+                        <label>Nombre de usuario</label>
+                        <input 
+                            type="text" 
+                            placeholder="Tu nombre" 
+                            name="username" 
+                            value={username} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Email</label>
+                        <input 
+                            type="email" 
+                            placeholder="tucorreo@ejemplo.com" 
+                            name="email" 
+                            value={email} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Contraseña</label>
+                        <input 
+                            type="password" 
+                            placeholder="Mínimo 6 caracteres" 
+                            name="password" 
+                            value={password} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Confirmar contraseña</label>
+                        <input 
+                            type="password" 
+                            placeholder="Repite tu contraseña" 
+                            name="confirmPassword" 
+                            value={confirmPassword} 
+                            onChange={onChange} 
+                            required 
+                        />
+                    </div>
+                    
+                    <button type="submit" className="btn-login">
+                        REGISTRARSE
+                    </button>
+                </form>
+
+                <div className="login-footer">
+                    <p>
+                        ¿Ya tienes cuenta? <a href="/">Inicia sesión aquí</a>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 };
