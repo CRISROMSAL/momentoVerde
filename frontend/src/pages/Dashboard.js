@@ -14,6 +14,8 @@ const Dashboard = () => {
         image: '' 
     });
 
+
+    //Tiene que llamar a un servicio y el servicio a un api para cargar las plantas del usuario (Ejempli /api/plantaApi.js--> Seria el encargado de llamar al endopint con Axios)
     useEffect(() => {
         const fetchPlants = async () => {
             try {
