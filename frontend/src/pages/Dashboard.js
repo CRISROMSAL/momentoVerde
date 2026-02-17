@@ -176,7 +176,7 @@ const Dashboard = () => {
         <div className="dashboard-container">
             <nav className="navbar">
                 <h1 className="logo">MOMENTO<span>VERDE</span></h1>
-                <button onClick={logout} className="btn-logout">Cerrar Sesión</button>
+                <button onClick={logout} className="btn-logout">Cerrar Sesión IIIIIIIIIIIII</button>
             </nav>
 
             <div className="main-content">
