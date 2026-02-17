@@ -1,8 +1,11 @@
 import React, { useState } from 'react'; 
-import axios from 'axios'; 
+// import axios from 'axios';  <-- YA NO LO NECESITAMOS AQUÍ
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'; 
 import '../App.css';
+
+// IMPORTAMOS EL SERVICIO
+import * as authService from '../services/authService';
 
 const Login = () => {
     
@@ -16,11 +19,14 @@ const Login = () => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4000/api/auth/login', formData);
+            // ANTES: const res = await axios.post('http://localhost:4000/api/auth/login', formData);
+            
+            // AHORA: Llamada al servicio desacoplado
+            const res = await authService.loginUser(formData);
             
             localStorage.setItem('token', res.data.token); 
             
-            // CAMBIO: Alerta de error
+            // CAMBIO: Alerta de error 
             await Swal.fire({
                 title: '¡Bienvenido!',
                 text: 'Entrando a tu jardín...',

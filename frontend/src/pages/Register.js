@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios'; <-- YA NO LO NECESITAMOS
 import Swal from 'sweetalert2'; 
 import '../App.css'; 
+
+// IMPORTAMOS EL SERVICIO (Ya lo creamos en el paso anterior)
+import * as authService from '../services/authService';
 
 const Register = () => {
 
@@ -19,7 +22,7 @@ const Register = () => {
     const onSubmit = async e => {
         e.preventDefault();
         
-        // CAMBIO: Alerta visual si no coinciden
+        // CAMBIO: Alerta visual si no coinciden (INTACTO)
         if (password !== confirmPassword) {
             Swal.fire({
                 title: 'Error',
@@ -30,7 +33,7 @@ const Register = () => {
             return;
         }
 
-        // Validación extra: El backend suele dar error 500 si la clave es muy corta
+        // Validación extra (INTACTO)
         if (password.length < 6) {
             Swal.fire({
                 title: 'Contraseña débil',
@@ -42,8 +45,11 @@ const Register = () => {
         }
 
         try {
-            // para coincidir con lo que suele pedir el Modelo de MongoDB
-            const res = await axios.post('http://localhost:4000/api/auth/register', {
+            // ANTES: const res = await axios.post(...)
+            
+            // AHORA: Llamada al servicio desacoplado
+            // Nota: Mantenemos el mapeo de "username" (estado) a "name" (lo que pide el backend)
+            const res = await authService.registerUser({
                 name: username, 
                 email: email,
                 password: password
@@ -51,7 +57,7 @@ const Register = () => {
 
             localStorage.setItem('token', res.data.token);
             
-            // CAMBIO: Alerta de éxito con temporizador antes de redirigir
+            // CAMBIO: Alerta de éxito con temporizador antes de redirigir (INTACTO)
             await Swal.fire({
                 title: '¡Bienvenido!',
                 text: 'Usuario registrado con éxito',
@@ -66,7 +72,7 @@ const Register = () => {
             // Estodirá en la consola (F12) el motivo real del Error 500
             console.error("Detalle del error del servidor:", err.response?.data);
             
-            // CAMBIO: Alerta de error visual 
+            // CAMBIO: Alerta de error visual (INTACTO)
             Swal.fire({
                 title: 'Error',
                 text: err.response?.data?.msg || 'Error al registrarse. Intenta con otro email.',
@@ -76,7 +82,7 @@ const Register = () => {
         }
     };
 
-   
+    // --- HTML VISUAL (INTACTO) ---
     return (
         <div className="login-container">
             <div className="login-card">

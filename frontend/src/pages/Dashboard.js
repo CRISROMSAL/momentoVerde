@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios'; // <-- YA NO LO USAMOS DIRECTAMENTE AQUÍ
 import Swal from 'sweetalert2'; 
 import '../App.css';
+
+// IMPORTAMOS EL SERVICIO
+import * as plantService from '../services/plantService';
 
 const Dashboard = () => {
     
@@ -15,15 +18,17 @@ const Dashboard = () => {
     });
 
 
-    //Tiene que llamar a un servicio y el servicio a un api para cargar las plantas del usuario (Ejempli /api/plantaApi.js--> Seria el encargado de llamar al endopint con Axios)
+    // Lógica desacoplada: Dashboard -> Service -> API
     useEffect(() => {
         const fetchPlants = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-                const res = await axios.get('http://localhost:4000/api/plants', {
-                    headers: { 'x-auth-token': token }
-                });
+                
+                // ANTES: const res = await axios.get(...)
+                // AHORA: Llamamos al servicio
+                const res = await plantService.fetchAllPlants(token);
+                
                 setPlants(res.data);
             } catch (err) { console.error("Error al cargar plantas:", err); }
         };
@@ -43,12 +48,13 @@ const Dashboard = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:4000/api/plants', newPlant, {
-                headers: { 'x-auth-token': token }
-            });
+            
+            // ANTES: const res = await axios.post(...)
+            // AHORA: Llamamos al servicio
+            const res = await plantService.addNewPlant(newPlant, token);
+
             setPlants([...plants, res.data]);
             setNewPlant({ name: '', species: '', wateringFrequency: '', lastWatered: '', image: '' });
-            
             
             Swal.fire({
                 title: '¡Añadida!',
@@ -60,7 +66,6 @@ const Dashboard = () => {
             });
 
         } catch (err) { 
-            
             Swal.fire({
                 title: 'Error',
                 text: 'Error al añadir la planta',
@@ -87,12 +92,13 @@ const Dashboard = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/plants/${id}`, {
-                headers: { 'x-auth-token': token }
-            });
+            
+            // ANTES: await axios.delete(...)
+            // AHORA: Llamamos al servicio
+            await plantService.removePlant(id, token);
+
             setPlants(plants.filter(plant => plant._id !== id));
             
-            // CAMBIO: confirmación visual al borrar
             Swal.fire({
                 icon: 'success',
                 title: 'Eliminada',
@@ -115,10 +121,9 @@ const Dashboard = () => {
             const token = localStorage.getItem('token');
             const dateToSave = customDate || new Date().toISOString().split('T')[0];
             
-            await axios.put(`http://localhost:4000/api/plants/${id}/water`, 
-                { lastWatered: dateToSave },
-                { headers: { 'x-auth-token': token } }
-            );
+            // ANTES: await axios.put(...)
+            // AHORA: Llamamos al servicio
+            await plantService.registerWatering(id, dateToSave, token);
 
             setPlants(prevPlants => 
                 prevPlants.map(p => {
@@ -127,7 +132,6 @@ const Dashboard = () => {
                 })
             );
             
-            // CAMBIO: Alerta 
             Swal.fire({
                 icon: 'success',
                 title: '¡Riego registrado!',
